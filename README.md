@@ -20,4 +20,21 @@ After compiling, to run a specific program or object with a main function, use
 ### Comments
 To write comments in Scala, use either "//" for single line comments or "/* ..... */" for multi-line comments.
 
+## Data Types and Naming Conventions
+
+There are 51 reserved words which cannot be used for variable names in Scala.
+
+Variables should be named in the lower camel case format, with classes, objects, and their constants being named in the upper camel case format. These conventions are not enforced by the compiler, and are just community guidelines. 
+
+Scala is a statically typed language as variables cannot change types after being created.
+
+Scala is a strongly typed language as variables of each type act in ways that are expected to act. 
+
+Scala is an implicitly typed language as you can choose whether or not to declare your variables' types.
+
+Variables that are defined with the val keyword are immutable, while those that are defined with var are mutable.
+
+
+
+
 Programming Languages Project for CS330 at Simmons University
