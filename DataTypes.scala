@@ -28,6 +28,8 @@ class DataTypeExamples(var constString: String)
 
         // intOne = 1 // Fails to compile
         intTwo = 250        
+
+        var string: String = "I am immutable even though I am a var"
     }
 
     def conversionExample = 
@@ -36,7 +38,7 @@ class DataTypeExamples(var constString: String)
         var byte: Byte = 127
         var double: Double = 6.1
 
-        println(s"Widenening byte to int: $byte + $int = ${byte + int}")
+        println(s"Widenening byte to int: $byte + $int = ${byte .+(int)}")
         println(s"Widenening int to double: $int + $double = ${int + double}")        
     }
 
@@ -53,7 +55,8 @@ class DataTypeExamples(var constString: String)
         var float: Float = 7.1
         // array(0) = float // Fails to compile
         array(0) = float.toInt
-        println(s"Getting first element: ${array(0)}")
+        // println(s"Getting first element: ${array(0)}")
+        println("Getting first element: " + array(0)) // Both ways work
         println(s"Need to use __.to___ to convert types in Scala")
     }
 
