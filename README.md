@@ -20,4 +20,27 @@ After compiling, to run a specific program or object with a main function, use
 ### Comments
 To write comments in Scala, use either "//" for single line comments or "/* ..... */" for multi-line comments.
 
+## Data Types and Naming Conventions
+There are 51 reserved words which cannot be used for variable names in Scala.
+
+Variables should be named in the lower camel case format, with classes, objects, and their constants being named in the upper camel case format. These conventions are not enforced by the compiler and instead are community guidelines. 
+
+Scala is a statically typed language as variables cannot change types after being created.
+
+Scala is a strongly typed language as variables of each type act in ways that are expected to act. 
+
+Scala is an implicitly typed language as you can choose whether or not to declare your variables' types.
+
+Variables that are defined with the val keyword are immutable, while those that are defined with var are mutable. It should be noted that String variables are immutable, even if one is declared a var.
+
+For all number types, the following commonly used operators are available and can be used between other number types: !=, ==, +, -, *, /, %, &, |, ^, <, >, <=, >=, >>, <<
+
+Mixed type operations are allowed for base types where a function has been created specifically for the interaction. An example would be performing an addition between an Int and a Double, where the Int uses either the "+" operator or the ".+()" function: "5 + 8.1" or "5.+(8.1)"
+
+Variable names and types are bound in compile time. By the time the program is being run, the types have already been erased and cannot be inspected as easily. Operators are also bound in compile time as functions are written for their operation.
+
+The only major pitfall encountered in this excersize would be trying to put multiple types of variables in the same Array, as this is not possible.
+
+There are not any built-in complex data types that are commonly used in Scala.
+
 Programming Languages Project for CS330 at Simmons University
