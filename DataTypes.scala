@@ -38,6 +38,8 @@ class DataTypeExamples(var constString: String)
         var byte: Byte = 127
         var double: Double = 6.1
 
+        println(s"Converting Double to Int: ${double.toInt}")
+
         println(s"Widenening byte to int: $byte + $int = ${byte .+(int)}")
         println(s"Widenening int to double: $int + $double = ${int + double}")        
     }

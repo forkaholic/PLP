@@ -39,10 +39,8 @@ Mixed type operations are allowed for base types where a function has been creat
 
 Variable names and types are bound in compile time. By the time the program is being run, the types have already been erased and cannot be inspected as easily. Operators are also bound in compile time as functions are written for their operation.
 
-
+The only major pitfall encountered in this excersize would be trying to put multiple types of variables in the same Array, as this is not possible.
 
 There are not any built-in complex data types that are commonly used in Scala.
-
-
 
 Programming Languages Project for CS330 at Simmons University
