@@ -43,7 +43,7 @@ The only major pitfall encountered in this excersize would be trying to put mult
 
 There are not any built-in complex data types that are commonly used in Scala.
 
-### Selection Statements
+## Selection Statements
 The boolean values in Scala are true and false, meaning you cannot use Ints to represent booleans.
 
 Scala makes use of the if/else if/else structure of control statements. In older versions of Scala, if/then/else was used instead.
@@ -55,5 +55,42 @@ As Scala is built on top of Java, it uses short circuiting in the same way. If c
 Scala deals with the dangling else problem by matching each else statement with the most recent available if statement that is in the same scope and immedeatly precedes the else statement (for both single statement code blocks and multi-line blocks). If there isn't an if statement that matches this description, then it is not a valid else statement and will cause compilation to fail. A simple way to avoid thinking about this issue entirely would be to use braces with every if and else statement. 
 
 When using the match case statements, at the end of a given case, the last evaluated statement is returned. This means that it is not possible to evaluate every condition without calling the function again and using a different case.
+
+## Loops and Functions
+
+### Functions
+Scala includes multiple types of loops. The while statement is exactly what you expect it to be, and is good for sentinel value loops. The do while loop (actually while do...) is pointless in Scala as the proper functionality was dropped in the transition to Scala 3, and what remains is just a worse while loop that obfuscates how you read code. The for loop in Scala is absolutely fantastic, as in addition to normal functionality of a scoped counter variable, the ability to use filters makes code easier to read as if statements are integrated into the parenthesis of the loop, and allowing multiple ranges simultaneously makes nested loops extremely simple to write if functionality is only needed in the innermost loop.
+
+To create a function in Scala, use the following formal:
+
+"def funcName(par: Type, ...): RetType = { ... }"
+
+To create a single line function without parameters that doesn't return anything use:
+(Note that statements such as if/else if/.../else, match case count as single line)
+
+"def funcName = ..."
+
+Using these two examples, any valid function declaration can be assembled.
+
+Functions cannot be placed anywhere, and must reside in a class or object declaration, or inside another function.
+
+Scala supports recursive functions.
+
+Scala allows for multiple parameters of different types to be used. 
+
+To return multiple values of different types, you must return those values in a tuple.
+
+Scala appears to be similar to Java in that it is pass by value (a value that is a reference), but that is not easily tested as all function parameters are immutable, meaning reassignment isn't possible. 
+
+As Scala is built on top of Java, it stores local variables in the stack, and references to object on the stack while placing actual objects in the heap.
+
+Variables are not accessible outisde of their scope in Scala. Loop blocks and function blocks are not treated differently.
+
+Side-effects are possible through the use of mutable object members and states. If reassignment takes place in a function then the change will persist outside of the functions scope. 
+
+An important piece of information that is necessary to write functions in Scala is that the last line evaluated is returned if a return type is provided in the signature. If the last line of a function is not the desired one to return, then simple reference the variable again at the end, and it will be the value that is returned. Another important detail is that functions with a return type can be used as parameters of another function.
+
+https://www.tutorialspoint.com/scala/
+https://www.dotnetperls.com/for-scala
 
 Programming Languages Project for CS330 at Simmons University
