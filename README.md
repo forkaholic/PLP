@@ -43,4 +43,17 @@ The only major pitfall encountered in this excersize would be trying to put mult
 
 There are not any built-in complex data types that are commonly used in Scala.
 
+### Selection Statements
+The boolean values in Scala are true and false, meaning you cannot use Ints to represent booleans.
+
+Scala makes use of the if/else if/else structure of control statements. In older versions of Scala, if/then/else was used instead.
+
+There are two ways to delimit code blocks in control statements. You can use no curly braces for single line expressions, with only a space being required for the next part of the control statement (if x else if y else z). The other option is required for multi-line code blocks, but can be used for single line blocks as well where you use curly braces (if{x}else if{y}else{z}). 
+
+As Scala is built on top of Java, it uses short circuiting in the same way. If conditions a is true and b is false, then a || b will be true with a short circuit and a && b will be false without a short circuit.
+
+Scala deals with the dangling else problem by matching each else statement with the most recent available if statement that is in the same scope and immedeatly precedes the else statement (for both single statement code blocks and multi-line blocks). If there isn't an if statement that matches this description, then it is not a valid else statement and will cause compilation to fail. A simple way to avoid thinking about this issue entirely would be to use braces with every if and else statement. 
+
+When using the match case statements, at the end of a given case, the last evaluated statement is returned. This means that it is not possible to evaluate every condition without calling the function again and using a different case.
+
 Programming Languages Project for CS330 at Simmons University

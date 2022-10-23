@@ -20,6 +20,25 @@ class SelectionExamples
             two  
         }  
         else other
+
+    def shortCircuitEx =
+    {
+        if(true || this.boom)
+        {
+            println("The world has not gone boom")
+        }
+        if(true && this.boom)
+        {
+            println("The world has not gone boom")
+        }
+    }
+
+    def boom: Boolean = 
+    {
+        println("The world is going boom")
+        false
+    }
+
 }
 
 
@@ -40,6 +59,7 @@ object Selections
 
         println(select.ifElseInt(funcNum2))
 
+        select.shortCircuitEx
 
     }
 
