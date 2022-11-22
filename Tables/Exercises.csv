@@ -1,0 +1,24 @@
+Int# ExerciseID, String# Exercise
+1,Chest Press
+2,Chest Press(D)
+3,Incline Press
+4,Incline Press(D)
+5,Fly
+6,Shoulder Press(M)
+7,Shoulder Press
+8,Tricep Extension
+9,Overhead Tricep Extension
+10,Tricep Pushdown
+11,Bicep Curl(M)
+12,Bicep Curl
+13,Rear Deltoids
+14,Back Pulldown
+15,Row
+16,Back Extension
+17,Leg Press
+18,Leg Abduction
+19,Leg Adduction
+20,Glute
+21,Leg Extension
+22,Leg Curl
+23,Calf Extension

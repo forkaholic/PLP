@@ -2,7 +2,7 @@ class Server
 {
     def start = 
     {
-        // Instantiate all necessary ControlUnit objects
+        // Instantiate ControlUnit objects
         
     }
 }
