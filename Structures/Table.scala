@@ -1,11 +1,21 @@
 import scala.collection.mutable.Map
 
 // Traits are for generics
-trait Key { def validState: Boolean }
-trait Value { def validState: Boolean }
+trait Required { def validState: Boolean }
+trait Key extends Required
+trait Value extends Required
 trait Activity
 trait Exercise
 trait User
+
+/*
+    All case classes are super condensed and hard to read because
+    they are essentially all the same thing, just with specialized implementations.
+    
+    I believe that given enough time I could probably generalize these
+    case classes even further, but given the time period I have remaining,
+    these are more than good enough. 
+*/
 
 // Key case classes
 case class ActivityKey(userID: Int = -1, date: String = "//",
@@ -39,36 +49,49 @@ case class ActivityValue(reps: Array[Int] = Array[Int]()) extends Value, Activit
     } 
     def validState: Boolean = reps != Array[Int]()
 }
-case class ExerciseValue(exercise: String = "") extends Value, Exercise
+case class ExerciseValue(exercise: String = "-1") extends Value, Exercise
 {
     override def toString: String = s"$exercise" 
-    def validState: Boolean = exercise != ""
+    def validState: Boolean = exercise != "-1"
 }
-case class UserValue(username: String = "") extends Value, User
+case class UserValue(username: String = "-1") extends Value, User
 {
     override def toString: String = s"$username"
-    def validState: Boolean = username != ""
+    def validState: Boolean = username != "-1"
 }
 
+/*
+    Second implementation of the Table class, one that
+    relies upon generics for Keys and Values instead of
+    really clunky generalized types like "Int | Double | String".
 
+    Original Table will be kept in a separate folder for
+    later reference
+*/
 class Table[T, K <: Key with T, V <: Value with T](file: String)
 {
     private var entries = scala.collection.mutable.Map[K,V]()
 
     // Key and Value assembled by ControlUnit
-    def addEntry(key: K, value: V) = if(!this.contains(key) 
-        && this.validKey(key)) entries += key -> value        
+    def addEntry(key: K, value: V) = if(!this.contains(key) && this.validElement(key)
+        && this.validElement(value)) entries += key -> value        
 
     def contains(key: K): Boolean = this.entries.contains(key)
     
-    def validKey(key: K): Boolean = !key.toString.matches("\\bnull\\b")
-
+    def validElement(element: K | V): Boolean = element.validState
 
     // Turns all entries into a zipped list ready to be turned into String
     def zipEntries: Iterable[(K, V)] = this.entries.keys.zip(this.entries.values)
 
     // Turn each entry into a String, place it into new list
     def stringify(entries: Iterable[(K, V)]): Iterable[String] = entries.map((k, v) => s"$k,$v")
+
+    def readFile = 
+    {
+        // Open file, begin reading in lines
+        // add ^ into csv as separator between Key and Value
+        // K(...? possibly String*???)
+    }
 
     // Overarching write function to file
     def writeFile =
@@ -89,10 +112,13 @@ object tempmain
     def main(args: Array[String]): Unit = 
     {
         val table = new Table[Activity, ActivityKey, ActivityValue]("Hello")
-        // table.addEntry(ActivityKey(1,"5/15/2001",5,50.0), ActivityValue(Array(10,12,11)))
-        // table.writeFile
-        println(table.validKey(ActivityKey(1,"5/15/2001",5,50.0)))
-        println(table.validKey(ActivityKey(1,"5/15/2001",5)))
-    
+        table.addEntry(ActivityKey(1,"5/15/2001",5,50.0), ActivityValue(Array(10,12,11)))
+        table.writeFile
+        // val key1 = ActivityKey(1,"5/15/2001",5,50.0)
+        // val key2 = ActivityKey(1,"5/15/2001",5)
+
+
+        // println(table.validKey(key1))
+        // println(table.validKey(key2))
     }
 }
