@@ -1,7 +1,9 @@
-import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
+import scala.collection.mutable.Map
+
 import Structures.Key
 import Structures.Value
+import Structures.IntArry
 
 package Structures {
 
@@ -16,8 +18,7 @@ package Structures {
     class Table(file: String, numKeys: Int, numValues: Int) 
     {
         private var numEntries = this.numKeys + this.numValues
-
-        private var entries: Map[Key,Value] = Map()
+        private var entries = ArrayBuffer[Array[Key | Value]]()
         private val types = new Array[String](this.numEntries)
 
         def apply(key: Key): Value = if(this.keyExists(key)) this.entries(key) else null
@@ -39,25 +40,21 @@ package Structures {
         // might read from the file whenever a record needs to be found
         def readFile = 
         {       
-            println("started")
-            var i = 0
+            // Can ignore first iteration
             val openFile = Source.fromFile(this.file)
             openFile.getLines.next()
             for(line <- openFile.getLines)
             {
                 val splitLine = line.split(",")
-
-                // if (i == 0){i = 1; println("i place")} // Make sure types are skipped
+                // if (i == 0 || splitLine.length < this.numEntries){i = 1} // Make sure types are skipped
                 // else
                 // {
-                    val first = Array[Int | Double | String](this.numKeys)
-                    val second = Array[Int | Double | String | Array[Int]](this.numValues)
+                    val first = new Array[Int | Double | String](this.numKeys)
+                    val second = new Array[Int | Double | String | IntArray](this.numValues)
                     var ok = true
                     var a = 0
                     while(a < this.numEntries && ok)
                     {
-                        print(a)
-                        println(first.length)
                         // Match the type of this column, then convert current value to that type
                         // Seperated into two blocks as there is type mismatch between Key and Value,
                         // could use generic here when creating table, but it gets to be a headache quickly...
@@ -84,11 +81,12 @@ package Structures {
                         a += 1
                     }
 
-                    println(ok)
                     if(ok) 
                     {
                         val kvp = this.keyValueFactory(first, second)
-                        this.entries + (kvp.key -> kvp.value)
+                        this.entries += (kvp.key -> kvp.value)
+                        // println(this.entries.contains(kvp.key))
+                        // println(kvp.toString)
                     }
                 // }
             }
@@ -120,10 +118,7 @@ package Structures {
         }
 
         private def keyValueFactory(first: Array[Int | Double | String],
-            second: Array[Int | Double | String | Array[Int]]): KVPTuple = {
-                first.foreach(e => println(e))
-                second.foreach(e => println(e))
-                
+            second: Array[Int | Double | String | IntArray]): KVPTuple = {            
                 new KVPTuple(new Key(first),
                     new Value(second))
 
@@ -143,6 +138,8 @@ package Structures {
         // Checks if key in entries
         def keyExists(key: Key): Boolean = 
         {
+            var i = 0
+            while(i < )
             entries.contains(key)
         }
 
@@ -158,7 +155,7 @@ package Structures {
 
         // }
 
-        def getTypeFromStringExtended(id: String, element: String): Int | Double | String | Array[Int] =
+        def getTypeFromStringExtended(id: String, element: String): Int | Double | String | IntArray =
         {
             try
             {
@@ -192,14 +189,15 @@ package Structures {
             }
         }
 
-        // Convert elements from Array[Int] to String
-        def intArrayToString(elements: Array[Int]): String = 
+        // Convert elements from IntArray to String
+        def intArrayToString(elements: IntArray): String = 
         {
             val sb = new StringBuilder("[")
 
-            for (ele <- elements)
+            
+            for (i <- 0 until elements.length)
             {
-                sb ++= (ele.toString + ";")
+                sb ++= (elements(i).toString + ";")
             }
 
             if (sb.length() > 1)
@@ -211,10 +209,10 @@ package Structures {
             sb.toString
         }
 
-        // Convert element from String to Array[Int]
-        def stringToIntArray(element: String): Array[Int] =
+        // Convert element from String to IntArray
+        def stringToIntArray(element: String): IntArray =
         {
-            element.replaceAll("[\\[\\]]", "").split(";").map(x => x.toInt)
+            new IntArray(element.replaceAll("[\\[\\]]", "").split(";").map(x => x.toInt))
         }
 
         // Get valid entries based on keys and their locations
@@ -226,14 +224,12 @@ package Structures {
         // }
 
         this.getTypes
-        
-        this.types.foreach(e => println(e))
-        
-        println()
-
         this.readFile
 
-        println(this(new Key(Array(1,"5/15/2001",21))))
+        val a = this(new Key(Array(1)))
+        if(a != null) println(a.toString)
+
+
 
         // End of constructor
     }
