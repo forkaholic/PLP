@@ -90,6 +90,19 @@ Side-effects are possible through the use of mutable object members and states. 
 
 An important piece of information that is necessary to write functions in Scala is that the last line evaluated is returned if a return type is provided in the signature. If the last line of a function is not the desired one to return, then simple reference the variable again at the end, and it will be the value that is returned. Another important detail is that functions with a return type can be used as parameters of another function.
 
+## Classes and Inheritance
+In Scala you are forced to use objects from the very beginning, as everything must be inside an object, class, or trait. Objects, classes, and traits all following the naming scheme of UpperCamelCase.
+
+As Scala is built off of the Java language and everything in Scala is forwards and backwards compatible with Java, all of the standard functions for objects from Java are available for use in Scala (although they might be under a different name). This includes equals, eq, toString, and more. 
+
+Inheritance in Scala is very similar to Java in that classes and traits (interfaces) can be extended and implemented (with). However, there is are slight changes in how both work, as traits can contain functionality, and classes cannot contain static members or functions. Other than that, classes and traits are the same. You are not able to inherit from multiple classes, but you can implement as many traits as you want.
+
+To override a non-final function previously defined by a super-class, the override keyword can be used before a function is defined to signify that the super function is to be ignored and the new one used in its place. The super method can still be used by using the format "super.functionName".
+
+Although static members and functions are not defined in Scala, the same functionality can be achieved by using companion objects, which are instances of a class that have additional implementations built in that can be accessed by every other instance, regardless of the visibility of the member or function. This can include constants, members, and functions that rely upon either.
+
+It should also be noted that there is a special type of class called the case class, which overrides the base Java functionality of == to instead interpret the arguments for equality instead of the address of the object. For example, a case class called Person with arguments "Sam" and 21, would be equivalent by default to another instance of Person with the same arguments.
+
 https://www.tutorialspoint.com/scala/
 https://www.dotnetperls.com/for-scala
 
