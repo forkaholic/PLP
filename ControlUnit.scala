@@ -1,6 +1,0 @@
-import Table
-
-class ControlUnit
-{
-
-}

@@ -4,8 +4,7 @@ RM = del
 CD = cd
 
 all:
-	scalac -Wconf:any:silent Structures/*.scala
-	
+	scalac -Wconf:any:silent Control/*.scala Structures/*.scala -explain	
 
 clean:
 	$(RM) *.class
