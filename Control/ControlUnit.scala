@@ -13,21 +13,21 @@ package Control
     */
     class ControlUnit
     {
-        val activityTable = new Table[ActivityKey, ActivityValue]("Tables\\Activities.csv")
-        val exerciseTable = new Table[ExerciseKey, ExerciseValue]("Tables\\Exercises.csv")
-        val userTable = new Table[UserKey, UserValue]("Tables\\Users.csv")
+        val activityTable = new Table[Activity, ActivityKey, ActivityValue]("Tables\\Activities.csv")
+        val exerciseTable = new Table[Exercise, ExerciseKey, ExerciseValue]("Tables\\Exercises.csv")
+        val userTable = new Table[User, UserKey, UserValue]("Tables\\Users.csv")
         val activityFactory = new ActivityFactory
         val exerciseFactory = new ExerciseFactory
         val userFactory = new UserFactory
 
         // Turns all entries into a zipped list ready to be turned into String
-        def zipEntries[K <: Key, V <: Value](table: Table[K, V]): Iterable[(K, V)] = table.entries.keys.zip(table.entries.values)
+        def zipEntries[T, K <: Key with T, V <: Value with T](table: Table[T, K, V]): Iterable[(K, V)] = table.entries.keys.zip(table.entries.values)
 
         // Turn each entry into a String, place it into new list
-        def stringify[K <: Key, V <: Value](entries: Iterable[(K, V)]): Iterable[String] = entries.map((k, v) => s"$k`$v")
+        def stringify[T, K <: Key with T, V <: Value with T](entries: Iterable[(K, V)]): Iterable[String] = entries.map((k, v) => s"$k#$v")
 
         // Read from the file and occupy the table with appropriate Key and Value
-        def readFile[K <: Key, V <: Value](table: Table[K, V]) = 
+        def readFile[T, K <: Key with T, V <: Value with T](table: Table[T, K, V]) = 
         {
             val openFile = Source.fromFile(table.file)
             val firstLine = openFile.getLines.next().split(",")
@@ -62,7 +62,7 @@ package Control
         }
 
         // Overarching write function to file
-        def writeFile[K <: Key, V <: Value](table: Table[K, V]) =
+        def writeFile[T, K <: Key with T, V <: Value with T](table: Table[T, K, V]) =
         {
             // Preps the entries
             val zipped = this.zipEntries(table)
@@ -74,11 +74,11 @@ package Control
             stringed.foreach(e => println(e))
         }
 
-        this.readFile[ActivityKey, ActivityValue](activityTable)
-        // this.writeFile[ActivityKey, ActivityValue](activityTable)
-        this.readFile[ExerciseKey, ExerciseValue](exerciseTable)
-        // this.writeFile[ExerciseKey, ExerciseValue](exerciseTable)
-        this.readFile[UserKey, UserValue](userTable)
-        // this.writeFile[UserKey, UserValue](userTable)
+        this.readFile[Activity, ActivityKey, ActivityValue](activityTable)
+        this.writeFile[Activity, ActivityKey, ActivityValue](activityTable)
+        this.readFile[Exercise, ExerciseKey, ExerciseValue](exerciseTable)
+        this.writeFile[Exercise, ExerciseKey, ExerciseValue](exerciseTable)
+        this.readFile[User, UserKey, UserValue](userTable)
+        this.writeFile[User, UserKey, UserValue](userTable)
     }
 }

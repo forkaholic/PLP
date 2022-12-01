@@ -12,7 +12,7 @@ package Structures
         Original Table will be kept in a separate folder for
         later reference
     */
-    class Table[K <: Key, V <: Value](val file: String)
+    class Table[T, K <: Key with T, V <: Value with T](val file: String)
     {
         var entries = scala.collection.mutable.Map[K,V]()
 
