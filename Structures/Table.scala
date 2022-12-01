@@ -12,7 +12,7 @@ package Structures
         Original Table will be kept in a separate folder for
         later reference
     */
-    class Table[T extends Type, K <: Key with T, V <: Value with T](val file: String)
+    class Table[K <: Key, V <: Value](val file: String)
     {
         var entries = scala.collection.mutable.Map[K,V]()
 
@@ -30,6 +30,6 @@ package Structures
             Checks if the element is in a valid state for an entry.
             This method does not apply to wildcard searches.
         */
-        def validElement(element: K | V): Boolean = element.validState
+        private def validElement(element: K | V): Boolean = element.validState
     }
 }

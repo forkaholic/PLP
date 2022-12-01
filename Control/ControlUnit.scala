@@ -13,21 +13,21 @@ package Control
     */
     class ControlUnit
     {
-        val activityTable = new Table[Activity, ActivityKey, ActivityValue]("Tables\\Activities.csv")
-        val exerciseTable = new Table[Exercise, ExerciseKey, ExerciseValue]("Tables\\Exercises.csv")
-        val userTable = new Table[User, UserKey, UserValue]("Tables\\Users.csv")
+        val activityTable = new Table[ActivityKey, ActivityValue]("Tables\\Activities.csv")
+        val exerciseTable = new Table[ExerciseKey, ExerciseValue]("Tables\\Exercises.csv")
+        val userTable = new Table[UserKey, UserValue]("Tables\\Users.csv")
         val activityFactory = new ActivityFactory
         val exerciseFactory = new ExerciseFactory
         val userFactory = new UserFactory
 
         // Turns all entries into a zipped list ready to be turned into String
-        def zipEntries(table: Table[Type, Key, Value]): Iterable[(Key, Value)] = table.entries.keys.zip(table.entries.values)
+        def zipEntries[K <: Key, V <: Value](table: Table[K, V]): Iterable[(K, V)] = table.entries.keys.zip(table.entries.values)
 
         // Turn each entry into a String, place it into new list
-        def stringify(entries: Iterable[(Key, Value)]): Iterable[String] = entries.map((k, v) => s"$k,$v")
+        def stringify[K <: Key, V <: Value](entries: Iterable[(K, V)]): Iterable[String] = entries.map((k, v) => s"$k`$v")
 
-        // Read from the file and occupy the table with appropriate Keys and Values
-        def readFile(table: Table[Type, Key, Value]) = 
+        // Read from the file and occupy the table with appropriate Key and Value
+        def readFile[K <: Key, V <: Value](table: Table[K, V]) = 
         {
             val openFile = Source.fromFile(table.file)
             val firstLine = openFile.getLines.next().split(",")
@@ -38,7 +38,7 @@ package Control
             for(line <- openFile.getLines)
             {
                 // ^ separates the Key from Value
-                val values = line.split("^")
+                val values = line.split("#")
                 val key = values(0).split(",")
                 val value = values(1).split(",")
                 kvpType match 
@@ -56,12 +56,13 @@ package Control
                         this.userFactory.createValue(value)
                     )
                 }
-                openFile.close()
             }
+
+            openFile.close()
         }
 
         // Overarching write function to file
-        def writeFile(table: Table[Type, Key, Value]) =
+        def writeFile[K <: Key, V <: Value](table: Table[K, V]) =
         {
             // Preps the entries
             val zipped = this.zipEntries(table)
@@ -73,9 +74,11 @@ package Control
             stringed.foreach(e => println(e))
         }
 
-        this.readFile(activityTable)
-        this.readFile(exerciseTable)
-        this.readFile(userTable)
-
+        this.readFile[ActivityKey, ActivityValue](activityTable)
+        // this.writeFile[ActivityKey, ActivityValue](activityTable)
+        this.readFile[ExerciseKey, ExerciseValue](exerciseTable)
+        // this.writeFile[ExerciseKey, ExerciseValue](exerciseTable)
+        this.readFile[UserKey, UserValue](userTable)
+        // this.writeFile[UserKey, UserValue](userTable)
     }
 }

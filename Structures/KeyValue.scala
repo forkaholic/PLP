@@ -6,12 +6,12 @@ package Structures
         def validState: Boolean 
         override def toString: String    
     }
-    trait Key extends Required
+    abstract class Key extends Required
     {
         def matches(other: Key): Boolean
     }
+    abstract class Value extends Required
     trait Type
-    trait Value extends Required
     trait Activity extends Type
     trait Exercise extends Type
     trait User extends Type

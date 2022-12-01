@@ -1,16 +1,18 @@
-TESTFILE = temp.scala
-OBJNAME = main
+TESTFILE = Main.scala
+OBJNAME = Main
 RM = del
 CD = cd
 
 all:
-	scalac -Wconf:any:silent Control/*.scala Structures/*.scala -explain	
+	scalac -Wconf:any:silent Control/*.scala Structures/*.scala	
 
 clean:
 	$(RM) *.class
 	$(RM) *.tasty
 	$(RM) .\Structures\*.class
 	$(RM) .\Structures\*.tasty
+	$(RM) .\Control\*.class
+	$(RM) .\Control\*.tasty
 
 test:
 	make
