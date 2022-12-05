@@ -1,6 +1,5 @@
-import scala.collection.mutable.Map
+import scala.collection.mutable.LinkedHashMap
 import Structures._
-import Control.ControlUnit
 
 package Structures 
 {
@@ -14,14 +13,18 @@ package Structures
     */
     class Table[T, K <: Key with T, V <: Value with T](val file: String)
     {
-        var entries = scala.collection.mutable.Map[K,V]()
+        var entries = scala.collection.mutable.LinkedHashMap[K,V]()
 
         def apply(key: K): Iterable[V] = 
             this.entries.keys.filter(key.matches(_)).map(x => this.entries(x))
 
         // Key and Value assembled by ControlUnit
-        def addEntry(key: K, value: V) = if(!this.contains(key) && this.validElement(key)
-            && this.validElement(value)) entries += key -> value        
+        def addEntry(key: K, value: V): Boolean = if(!this.contains(key) && this.validElement(key)
+            && this.validElement(value)) { entries += key -> value; true } else false       
+
+        // Attempt to update entry, if bad value, put original back
+        def updateEntry(key: K, value: V) = if(this.contains(key)) 
+            { val orig = this(key).head; this.entries -= key; if(!this.addEntry(key,value)) this.addEntry(key,orig) }
 
         // Checks if entries contains a given Key
         def contains(key: K): Boolean = this.entries.contains(key)

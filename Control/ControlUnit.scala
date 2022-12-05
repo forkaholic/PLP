@@ -26,6 +26,32 @@ package Control
         // Turn each entry into a String, place it into new list
         def stringify[T, K <: Key with T, V <: Value with T](entries: Iterable[(K, V)]): Iterable[String] = entries.map((k, v) => s"$k#$v")
 
+        // Add Activity kvp to Activity Table
+        def addActivity(key: Array[String], value: Array[String]) = 
+            activityTable.addEntry(activityFactory.createKey(key), activityFactory.createValue(value))
+            
+        // Add existing Activity kvp to Activity Table
+        def addExistingActivity(key: Array[String], value: Array[String]) = 
+            activityTable.addEntry(activityFactory.existingKey(key), activityFactory.createValue(value))
+
+        // Add Exercise kvp to Exercise Table
+        def addExercise(value: Array[String]) = 
+            exerciseTable.addEntry(exerciseFactory.createKey(), exerciseFactory.createValue(value))
+
+        // Add existing Exercise kvp to Exercise Table
+        def addExistingExercise(key: Array[String], value: Array[String]) = 
+            exerciseTable.addEntry(exerciseFactory.existingKey(key), exerciseFactory.createValue(value))
+
+        // Add User kvp to User Table
+        def addUser(key: Array[String]) =
+            if(userTable.entries.keys.size == 0 || !UserKey(-1, key(0)).matchesAny(userTable.entries.keys))
+                userTable.addEntry(userFactory.createKey(key), userFactory.createValue())
+
+        // Add existing User kvp to User Table
+        def addExistingUser(key: Array[String]) =
+            if(userTable.entries.keys.size == 0 || !UserKey(-1, key(1)).matchesAny(userTable.entries.keys))
+                userTable.addEntry(userFactory.existingKey(key), userFactory.createValue())
+
         // Read from the file and occupy the table with appropriate Key and Value
         def readFile[T, K <: Key with T, V <: Value with T](table: Table[T, K, V]) = 
         {
@@ -40,21 +66,11 @@ package Control
                 // ^ separates the Key from Value
                 val values = line.split("#")
                 val key = values(0).split(",")
-                val value = values(1).split(",")
                 kvpType match 
                 {
-                    case "Activity" => this.activityTable.addEntry(
-                        this.activityFactory.createKey(key), 
-                        this.activityFactory.createValue(value) 
-                    )
-                    case "Exercise" => this.exerciseTable.addEntry(
-                        this.exerciseFactory.createKey(key),
-                        this.exerciseFactory.createValue(value)
-                    )
-                    case "User" => this.userTable.addEntry(
-                        this.userFactory.createKey(key),
-                        this.userFactory.createValue(value)
-                    )
+                    case "Activity" => this.addExistingActivity(key,values(1).split(","))
+                    case "Exercise" => this.addExistingExercise(key,values(1).split(","))
+                    case "User" => this.addExistingUser(key)
                 }
             }
 
@@ -74,11 +90,16 @@ package Control
             stringed.foreach(e => println(e))
         }
 
-        this.readFile[Activity, ActivityKey, ActivityValue](activityTable)
-        this.writeFile[Activity, ActivityKey, ActivityValue](activityTable)
-        this.readFile[Exercise, ExerciseKey, ExerciseValue](exerciseTable)
-        this.writeFile[Exercise, ExerciseKey, ExerciseValue](exerciseTable)
+        // this.readFile[Activity, ActivityKey, ActivityValue](activityTable)
+        // this.writeFile[Activity, ActivityKey, ActivityValue](activityTable)
+        // this.readFile[Exercise, ExerciseKey, ExerciseValue](exerciseTable)
+        // this.writeFile[Exercise, ExerciseKey, ExerciseValue](exerciseTable)
         this.readFile[User, UserKey, UserValue](userTable)
-        this.writeFile[User, UserKey, UserValue](userTable)
+
+        userTable.entries.keys.foreach(println(_))
+
+        // this.writeFile[User, UserKey, UserValue](userTable)
+
+        println(UserKey(-1, "kyle").matchesAny(userTable.entries.keys))
     }
 }
