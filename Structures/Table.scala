@@ -11,7 +11,7 @@ package Structures
         Original Table will be kept in a separate folder for
         later reference
     */
-    class Table[T, K <: Key with T, V <: Value with T](val file: String)
+    class Table[T, K <: Key with T, V <: Value with T](val file: String, val kvpType: String)
     {
         var entries = scala.collection.mutable.LinkedHashMap[K,V]()
 

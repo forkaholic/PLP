@@ -1,4 +1,5 @@
 import scala.io.Source
+import java.io._
 import Structures._
 
 package Control
@@ -13,9 +14,9 @@ package Control
     */
     class ControlUnit
     {
-        val activityTable = new Table[Activity, ActivityKey, ActivityValue]("Tables\\Activities.csv")
-        val exerciseTable = new Table[Exercise, ExerciseKey, ExerciseValue]("Tables\\Exercises.csv")
-        val userTable = new Table[User, UserKey, UserValue]("Tables\\Users.csv")
+        val activityTable = new Table[Activity, ActivityKey, ActivityValue]("Tables\\Activities.csv", "Activity")
+        val exerciseTable = new Table[Exercise, ExerciseKey, ExerciseValue]("Tables\\Exercises.csv", "Exercise")
+        val userTable = new Table[User, UserKey, UserValue]("Tables\\Users.csv", "User")
         val activityFactory = new ActivityFactory
         val exerciseFactory = new ExerciseFactory
         val userFactory = new UserFactory
@@ -56,17 +57,13 @@ package Control
         def readFile[T, K <: Key with T, V <: Value with T](table: Table[T, K, V]) = 
         {
             val openFile = Source.fromFile(table.file)
-            val firstLine = openFile.getLines.next().split(",")
-            val kvpType: String = firstLine(0)
-            val keyLength = firstLine(1)
-            val valueLength = firstLine(2)
-
             for(line <- openFile.getLines)
             {
                 // ^ separates the Key from Value
                 val values = line.split("#")
                 val key = values(0).split(",")
-                kvpType match 
+
+                table.kvpType match 
                 {
                     case "Activity" => this.addExistingActivity(key,values(1).split(","))
                     case "Exercise" => this.addExistingExercise(key,values(1).split(","))
@@ -86,20 +83,18 @@ package Control
             // Stringify each entry
             val stringed = this.stringify(zipped)
             
-            // For now just print
-            stringed.foreach(e => println(e))
+            // Write to file
+            val fileWriter = new FileWriter(new File(table.file))
+            stringed.foreach(e => fileWriter.write(s"$e\n"))
+            fileWriter.close()
         }
 
-        // this.readFile[Activity, ActivityKey, ActivityValue](activityTable)
-        // this.writeFile[Activity, ActivityKey, ActivityValue](activityTable)
-        // this.readFile[Exercise, ExerciseKey, ExerciseValue](exerciseTable)
-        // this.writeFile[Exercise, ExerciseKey, ExerciseValue](exerciseTable)
+        this.readFile[Activity, ActivityKey, ActivityValue](activityTable)
+        this.readFile[Exercise, ExerciseKey, ExerciseValue](exerciseTable)
         this.readFile[User, UserKey, UserValue](userTable)
 
-        userTable.entries.keys.foreach(println(_))
-
-        // this.writeFile[User, UserKey, UserValue](userTable)
-
-        println(UserKey(-1, "kyle").matchesAny(userTable.entries.keys))
+        this.writeFile[Activity, ActivityKey, ActivityValue](activityTable)
+        this.writeFile[Exercise, ExerciseKey, ExerciseValue](exerciseTable)
+        this.writeFile[User, UserKey, UserValue](userTable)
     }
 }
