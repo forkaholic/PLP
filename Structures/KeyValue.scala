@@ -51,26 +51,24 @@ package Structures
             otherKey match
             {
                 case other: ExerciseKey =>  
-                    if(this.exerciseID != -1 && this.exerciseID != other.exerciseID) false
+                    if(this.exerciseID != -1 && other.exerciseID != -1 && this.exerciseID != other.exerciseID) false
                     else true
                 case _ => false
             }
         override def toString: String = s"$exerciseID" 
         def validState: Boolean = exerciseID != -1
     }
-    case class UserKey(userID: Int = -1, username: String = "-1") extends Key with User
+    case class UserKey(userID: Int = -1) extends Key with User
     {
         def matches(otherKey: Key): Boolean = 
             otherKey match
             {
                 case other: UserKey =>  
-                    if((this.userID != -1 && other.userID != -1 && this.userID != other.userID)
-                    || (this.username != "-1" && other.username != "-1" && this.username != other.username)) false
+                    if(this.userID != -1 && other.userID != -1 && this.userID != other.userID) false
                     else true
                 case _ => false
             }
-        def matchesAny(others: Iterable[UserKey]): Boolean = others.exists(this.matches(_))
-        override def toString: String = s"$userID,$username"
+        override def toString: String = s"$userID"
         def validState: Boolean = userID != -1
     }
 
@@ -96,11 +94,14 @@ package Structures
         override def toString: String = s"$exercise" 
         def validState: Boolean = exercise != "-1"
     }
-    case class UserValue() extends Value with User
+    case class UserValue(username: String = "-1") extends Value with User
     {
-        def matches(other: UserValue): Boolean = true
-        override def toString: String = ""
-        def validState: Boolean = true
+        def matches(other: UserValue): Boolean = 
+            if(this.username != "-1" && other.username != "-1" && this.username != other.username) false
+            else true
+        def matchesAny(others: Iterable[UserValue]): Boolean = others.exists(this.matches(_))
+        override def toString: String = s"$username"
+        def validState: Boolean = username != "-1"
     }
 
     class ActivityFactory
@@ -121,6 +122,9 @@ package Structures
             ActivityKey(values(0).toInt, values(1).toInt, values(2), values(3).toInt, values(4).toDouble)
         }
 
+        def searchKey(values: Array[String]): ActivityKey = 
+            ActivityKey(values(0).toInt, values(1).toInt, values(2), values(3).toInt, values(4).toDouble)
+
         def createValue(values: Array[String]): ActivityValue = ActivityValue(this.toIntArray(values(0)))
     }
 
@@ -140,6 +144,8 @@ package Structures
             ExerciseKey(values(0).toInt)
         }
 
+        def searchKey(values: Array[String]): ExerciseKey = ExerciseKey(values(0).toInt)
+
         def createValue(values: Array[String]): ExerciseValue = ExerciseValue(values(0))
     }
 
@@ -147,18 +153,20 @@ package Structures
     {
         var lastID = -1
 
-        def createKey(values: Array[String]): UserKey =
+        def createKey(): UserKey =
         {
             lastID += 1
-            UserKey(lastID, values(1))
+            UserKey(lastID)
         }
 
         def existingKey(values: Array[String]): UserKey =
         {
             lastID = values(0).toInt
-            UserKey(values(0).toInt, values(1))
+            UserKey(values(0).toInt)
         }
 
-        def createValue(): UserValue = UserValue()
+        def searchKey(values: Array[String]): UserKey = UserKey(values(0).toInt)
+
+        def createValue(values: Array[String]): UserValue = UserValue(values(0))
     }
 }

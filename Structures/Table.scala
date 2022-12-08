@@ -15,8 +15,11 @@ package Structures
     {
         var entries = scala.collection.mutable.LinkedHashMap[K,V]()
 
-        def apply(key: K): Iterable[V] = 
+        def apply(key: K): V = this.entries(key)
+
+        def getAll(key: K): Iterable[V] = 
             this.entries.keys.filter(key.matches(_)).map(x => this.entries(x))
+
 
         // Key and Value assembled by ControlUnit
         def addEntry(key: K, value: V): Boolean = if(!this.contains(key) && this.validElement(key)
@@ -24,7 +27,9 @@ package Structures
 
         // Attempt to update entry, if bad value, put original back
         def updateEntry(key: K, value: V) = if(this.contains(key)) 
-            { val orig = this(key).head; this.entries -= key; if(!this.addEntry(key,value)) this.addEntry(key,orig) }
+            { val orig = this(key); this.entries -= key; if(!this.addEntry(key,value)) this.addEntry(key,orig) }
+
+        def removeEntry(key: K) = if(this.contains(key)) this.entries -= key
 
         // Checks if entries contains a given Key
         def contains(key: K): Boolean = this.entries.contains(key)
