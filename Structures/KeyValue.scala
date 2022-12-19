@@ -91,6 +91,7 @@ package Structures
     {
         def matches(other: ExerciseValue): Boolean = 
             if(this.exercise != "-1" && this.exercise != other.exercise) false else true
+        def matchesAny(others: Iterable[ExerciseValue]): Boolean = others.exists(this.matches(_))
         override def toString: String = s"$exercise" 
         def validState: Boolean = exercise != "-1"
     }

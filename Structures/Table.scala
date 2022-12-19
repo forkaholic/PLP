@@ -15,11 +15,11 @@ package Structures
     {
         var entries = scala.collection.mutable.LinkedHashMap[K,V]()
 
+        // Should only be used in a safe manor, if key doesn't exist, server crashes
         def apply(key: K): V = this.entries(key)
 
         def getAll(key: K): Iterable[V] = 
             this.entries.keys.filter(key.matches(_)).map(x => this.entries(x))
-
 
         // Key and Value assembled by ControlUnit
         def addEntry(key: K, value: V): Boolean = if(!this.contains(key) && this.validElement(key)
@@ -30,6 +30,7 @@ package Structures
             { val orig = this(key); this.entries -= key; if(!this.addEntry(key,value)) this.addEntry(key,orig) }
 
         def removeEntry(key: K) = if(this.contains(key)) this.entries -= key
+        def removeEntries(key: K) = this.entries.keys.foreach(x => if(key.matches(x)) this.removeEntry(x))
 
         // Checks if entries contains a given Key
         def contains(key: K): Boolean = this.entries.contains(key)

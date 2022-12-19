@@ -19,6 +19,9 @@ test:
 	scalac $(TESTFILE)
 	scala $(OBJNAME)
 
+run:
+	scala $(OBJNAME)
+
 testnoc:
 	scalac $(TESTFILE)
 	scala $(OBJNAME)
