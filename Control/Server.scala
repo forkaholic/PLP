@@ -33,7 +33,7 @@ package Control
                         {
                             val elements = Array.ofDim[String](split.size - 2)
                             for(i <- 2 until split.size) elements(i - 2) = split(i)
-                            controller.clientSearch(split(1), elements).foreach(x => println(x))
+                            println(controller.clientSearch(split(1), elements))
                         }
                         case "update" =>
                         {
